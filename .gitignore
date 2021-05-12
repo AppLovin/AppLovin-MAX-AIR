@@ -1,0 +1,15 @@
+# General
+temp
+
+#Idea
+.idea
+*.iml
+classes
+out
+
+# OS X
+.DS_Store
+
+# Misc
+*.swf
+*.iml
