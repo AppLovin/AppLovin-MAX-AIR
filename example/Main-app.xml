@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/33.1">
+    <id>com.applovin.max.air.demo</id>
+    <versionNumber>1.0.0</versionNumber>
+    <filename>AppLovin MAX Demo</filename>
+
+    <initialWindow>
+        <content>Main.swf</content>
+    </initialWindow>
+
+    <supportedProfiles>mobileDevice</supportedProfiles>
+    <extensions>
+        <extensionID>com.applovin.air</extensionID>
+    </extensions>
+
+    <iPhone>
+        <InfoAdditions>
+            <![CDATA[
+                <key>CFBundleURLTypes</key>
+                <array>
+                    <dict>
+                        <key>CFBundleURLName</key>
+                        <string>com.applovin.max.air.demo</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                        <string>applovin-max-example</string>
+                        </array>
+                    </dict>
+                </array>
+                <key>NSUserTrackingUsageDescription</key>
+                <string>This only uses device info for less annoying, more relevant ads</string>
+                <key>AppLovinConsentFlowInfo</key>
+                <dict>
+                    <key>AppLovinConsentFlowEnabled</key>
+                    <true/>
+                    <key>AppLovinConsentFlowPrivacyPolicy</key>
+                    <string>https://your_company_name.com/privacy_policy</string>
+                    <key>AppLovinConsentFlowTermsOfService</key>
+                    <string>https://your_company_name.com/terms_of_service</string>
+                </dict>
+            ]]>
+        </InfoAdditions>
+    </iPhone>
+
+    <android>
+        <manifestAdditions>
+            <![CDATA[
+                <manifest android:installLocation="auto">
+                    <uses-permission android:name="android.permission.INTERNET"/>
+                    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+                    <application android:networkSecurityConfig="@xml/network_security_config" >
+                        <activity>
+                            <intent-filter>
+                                <action android:name="android.intent.action.MAIN"/>
+                                <category android:name="android.intent.category.LAUNCHER"/>
+                            </intent-filter>
+                            <intent-filter>
+                                <data android:scheme="applovin-max-example" />
+                                <action android:name="android.intent.action.VIEW" />
+                                <category android:name="android.intent.category.DEFAULT" />
+                                <category android:name="android.intent.category.BROWSABLE" />
+                            </intent-filter>
+                        </activity>
+
+                    <provider
+                        android:name="com.applovin.sdk.AppLovinInitProvider"
+                        android:authorities="com.applovin.max.air.demo.applovininitprovider"
+                        android:exported="false"
+                        android:initOrder="101" />
+
+                    <activity
+                        android:name="com.applovin.adview.AppLovinInterstitialActivity"
+                        android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|uiMode"
+                        android:hardwareAccelerated="true"
+                        android:screenOrientation="behind" />
+                    <activity
+                        android:name="com.applovin.adview.AppLovinFullscreenActivity"
+                        android:configChanges="keyboard|keyboardHidden|locale|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+                        android:exported="false"
+                        android:hardwareAccelerated="true"
+                        android:launchMode="singleTop"
+                        android:screenOrientation="behind" />
+
+                    <activity
+                        android:name="com.applovin.sdk.AppLovinWebViewActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize|uiMode" />
+
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerDetailActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerMultiAdActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerAdUnitsListActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerAdUnitDetailActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+                    <activity
+                        android:name="com.applovin.mediation.MaxDebuggerTestLiveNetworkActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize" />
+
+                    <service
+                        android:name="com.applovin.impl.sdk.utils.AppKilledService"
+                        android:exported="false"
+                        android:stopWithTask="false" />
+                    <service
+                        android:name="com.applovin.impl.adview.activity.FullscreenAdService"
+                        android:exported="false"
+                        android:stopWithTask="false" />
+                    </application>
+                </manifest>
+            ]]>
+        </manifestAdditions>
+    </android>
+</application>
