@@ -1,12 +1,13 @@
 package
 {
-    import com.applovin.air.AdEventInfo;
-    import com.applovin.air.AdViewPosition;
     import com.applovin.air.AppLovinMAX;
     import com.applovin.air.AppLovinMAXEvents;
     import com.applovin.air.AppLovinMAXParameters;
-    import com.applovin.air.AppLovinMAXReward;
-    import com.applovin.air.SdkConfiguration;
+    import com.applovin.air.data.AdInfo;
+    import com.applovin.air.data.ErrorInfo;
+    import com.applovin.air.data.Reward;
+    import com.applovin.air.data.SdkConfiguration;
+    import com.applovin.air.enums.AdViewPosition;
 
     import flash.display.SimpleButton;
 
@@ -47,6 +48,8 @@ package
             buildButton(5, "Track Event", trackEvent);
             buildButton(6, "Show Mediation Debugger", showMediationDebugger);
 
+            AppLovinMAX.setTestDeviceAdvertisingIds(["YOUR_IDFA_HERE", "YOUR_GAID_HERE"])
+
             AppLovinMAXEvents.setSdkInitializedEvent(function (configuration:SdkConfiguration):void
             {
                 setStatus("SDK Initialized");
@@ -78,14 +81,14 @@ package
             AppLovinMAXEvents.setInterstitialLoadedEvent(onInterstitialLoaded);
             AppLovinMAXEvents.setInterstitialLoadFailedEvent(onInterstitialLoadFailed);
             AppLovinMAXEvents.setInterstitialDisplayedEvent(onInterstitialDisplayed);
-            AppLovinMAXEvents.setInterstitialFailedToDisplayEvent(onInterstitialFailedToDisplay);
+            AppLovinMAXEvents.setInterstitialDisplayFailedEvent(onInterstitialDisplayFailed);
             AppLovinMAXEvents.setInterstitialClickedEvent(onInterstitialClicked);
             AppLovinMAXEvents.setInterstitialHiddenEvent(onInterstitialHidden);
 
             AppLovinMAXEvents.setRewardedAdLoadedEvent(onRewardedAdLoaded);
-            AppLovinMAXEvents.setRewardedAdLoadFailedEvent(onRewardedAdFailedToLoad);
+            AppLovinMAXEvents.setRewardedAdLoadFailedEvent(onRewardedAdLoadFailed);
             AppLovinMAXEvents.setRewardedAdDisplayedEvent(onRewardedAdDisplayed);
-            AppLovinMAXEvents.setRewardedAdFailedToDisplayEvent(onRewardedAdFailedToDisplay);
+            AppLovinMAXEvents.setRewardedAdDisplayFailedEvent(onRewardedAdDisplayFailed);
             AppLovinMAXEvents.setRewardedAdClickedEvent(onRewardedAdClicked);
             AppLovinMAXEvents.setRewardedAdReceivedRewardEvent(onRewardedAdReceivedReward);
             AppLovinMAXEvents.setRewardedAdHiddenEvent(onRewardedAdHidden);
@@ -291,154 +294,149 @@ package
             AppLovinMAX.showMediationDebugger();
         }
 
-        private function onBannerAdLoaded(adEventInfo:AdEventInfo):void
+        private function onBannerAdLoaded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onBannerAdLoaded called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onBannerAdLoaded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
+
             setStatus("Banner ad loaded")
-
-            traceTestAppEvent("Ad Info\tAd Unit ID: " + adEventInfo.getAdUnitId() +
-                    "\tNetwork Name: " + adEventInfo.getNetworkName() +
-                    "\tPlacement: " + adEventInfo.getPlacement() +
-                    "\tCreative ID: " + adEventInfo.getCreativeId() +
-                    "\tRevenue: " + adEventInfo.getRevenue())
         }
 
-        private function onBannerAdLoadFailed(adEventInfo:AdEventInfo):void
+        private function onBannerAdLoadFailed(adUnitId:String, errorInfo:ErrorInfo):void
         {
-            traceTestAppEvent("onBannerAdLoadFailed called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("Banner ad failed to load with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onBannerAdLoadFailed called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            setStatus("Banner ad failed to load with error: " + errorInfo)
         }
 
-        private function onBannerAdClicked(adEventInfo:AdEventInfo):void
+        private function onBannerAdClicked(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onBannerAdClicked called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onBannerAdClicked called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onBannerAdExpanded(adEventInfo:AdEventInfo):void
+        private function onBannerAdExpanded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onBannerAdExpanded called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onBannerAdExpanded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onBannerAdCollapsed(adEventInfo:AdEventInfo):void
+        private function onBannerAdCollapsed(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onBannerAdCollapsed called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onBannerAdCollapsed called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onMRecAdLoaded(adEventInfo:AdEventInfo):void
+        private function onMRecAdLoaded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onMRecAdLoaded called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onMRecAdLoaded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
+
             setStatus("MREC ad loaded")
-
-            traceTestAppEvent("Ad Info\tAd Unit ID: " + adEventInfo.getAdUnitId() +
-                    "\tNetwork Name: " + adEventInfo.getNetworkName() +
-                    "\tPlacement: " + adEventInfo.getPlacement() +
-                    "\tCreative ID: " + adEventInfo.getCreativeId() +
-                    "\tRevenue: " + adEventInfo.getRevenue())
         }
 
-        private function onMRecAdLoadFailed(adEventInfo:AdEventInfo):void
+        private function onMRecAdLoadFailed(adUnitId:String, errorInfo:ErrorInfo):void
         {
-            traceTestAppEvent("onMRecAdLoadFailed called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("MREC ad failed to load with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onMRecAdLoadFailed called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            setStatus("MREC ad failed to load with error: " + errorInfo)
         }
 
-        private function onMRecAdClicked(adEventInfo:AdEventInfo):void
+        private function onMRecAdClicked(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onMRecAdClicked called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onMRecAdClicked called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onMRecAdExpanded(adEventInfo:AdEventInfo):void
+        private function onMRecAdExpanded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onMRecAdExpanded called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onMRecAdExpanded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onMRecAdCollapsed(adEventInfo:AdEventInfo):void
+        private function onMRecAdCollapsed(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onMRecAdCollapsed called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onMRecAdCollapsed called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onInterstitialLoaded(adEventInfo:AdEventInfo):void
+        private function onInterstitialLoaded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onInterstitialLoaded called for ad unit ID: " + adEventInfo.getAdUnitId())
-            setStatus("Interstitial ad loaded")
+            traceTestAppEvent("onInterstitialLoaded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onInterstitialLoadFailed(adEventInfo:AdEventInfo):void
+        private function onInterstitialLoadFailed(adUnitId:String, errorInfo:ErrorInfo):void
         {
-            traceTestAppEvent("onInterstitialLoadFailed called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("Interstitial ad failed to load with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onInterstitialLoadFailed called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            setStatus("Interstitial ad failed to load with error: " + errorInfo)
         }
 
-        private function onInterstitialDisplayed(adEventInfo:AdEventInfo):void
+        private function onInterstitialDisplayed(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onInterstitialDisplayed called for ad unit ID: " + adEventInfo.getAdUnitId())
-
-            traceTestAppEvent("Ad Info\tAd Unit ID: " + adEventInfo.getAdUnitId() +
-                    "\tNetwork Name: " + adEventInfo.getNetworkName() +
-                    "\tPlacement: " + adEventInfo.getPlacement() +
-                    "\tCreative ID: " + adEventInfo.getCreativeId() +
-                    "\tRevenue: " + adEventInfo.getRevenue())
+            traceTestAppEvent("onInterstitialDisplayed called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onInterstitialFailedToDisplay(adEventInfo:AdEventInfo):void
+        private function onInterstitialDisplayFailed(adUnitId:String, errorInfo:ErrorInfo, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onInterstitialFailedToDisplay called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("Interstitial ad failed to display with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onInterstitialDisplayFailed called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            traceTestAppEvent("Ad Info: " + adInfo)
+            traceTestAppEvent("Error Info: " + errorInfo)
         }
 
-        private function onInterstitialClicked(adEventInfo:AdEventInfo):void
+        private function onInterstitialClicked(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onInterstitialClicked called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onInterstitialClicked called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onInterstitialHidden(adEventInfo:AdEventInfo):void
+        private function onInterstitialHidden(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onInterstitialHidden called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onInterstitialHidden called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onRewardedAdLoaded(adEventInfo:AdEventInfo):void
+        private function onRewardedAdLoaded(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onRewardedAdLoaded called for ad unit ID: " + adEventInfo.getAdUnitId())
-            setStatus("Rewarded ad loaded")
+            traceTestAppEvent("onRewardedAdLoaded called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onRewardedAdFailedToLoad(adEventInfo:AdEventInfo):void
+        private function onRewardedAdLoadFailed(adUnitId:String, errorInfo:ErrorInfo):void
         {
-            traceTestAppEvent("onRewardedAdFailedToLoad called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("Interstitial ad failed to load with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onRewardedAdLoadFailed called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            setStatus("Interstitial ad failed to load with error: " + errorInfo)
         }
 
-        private function onRewardedAdDisplayed(adEventInfo:AdEventInfo):void
+        private function onRewardedAdDisplayed(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onRewardedAdDisplayed called for ad unit ID: " + adEventInfo.getAdUnitId())
-
-            traceTestAppEvent("Ad Info\tAd Unit ID: " + adEventInfo.getAdUnitId() +
-                    "\tNetwork Name: " + adEventInfo.getNetworkName() +
-                    "\tPlacement: " + adEventInfo.getPlacement() +
-                    "\tCreative ID: " + adEventInfo.getCreativeId() +
-                    "\tRevenue: " + adEventInfo.getRevenue())
+            traceTestAppEvent("onRewardedAdDisplayed called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onRewardedAdFailedToDisplay(adEventInfo:AdEventInfo):void
+        private function onRewardedAdDisplayFailed(adUnitId:String, errorInfo:ErrorInfo, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onRewardedAdFailedToDisplay called for ad unit ID: " + adEventInfo.getAdUnitId() + " and error code: " + adEventInfo.getErrorCode())
-            setStatus("Rewarded ad failed to display with error: " + adEventInfo.getErrorCode())
+            traceTestAppEvent("onRewardedAdFailedToDisplay called for ad unit ID: " + adUnitId + " and error code: " + errorInfo.code)
+            traceTestAppEvent("Ad Info: " + adInfo)
+            traceTestAppEvent("Error Info: " + errorInfo)
         }
 
-        private function onRewardedAdClicked(adEventInfo:AdEventInfo):void
+        private function onRewardedAdClicked(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onRewardedAdClicked called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onRewardedAdClicked called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onRewardedAdReceivedReward(adEventInfo:AdEventInfo, reward:AppLovinMAXReward):void
+        private function onRewardedAdReceivedReward(adUnitId: String, adInfo:AdInfo, reward:Reward):void
         {
-            traceTestAppEvent("onRewardedAdReceivedReward called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onRewardedAdReceivedReward called for ad unit ID: " + adUnitId)
             setStatus("Rewarded ad rewarded with " + reward.toString())
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
-        private function onRewardedAdHidden(adEventInfo:AdEventInfo):void
+        private function onRewardedAdHidden(adUnitId:String, adInfo:AdInfo):void
         {
-            traceTestAppEvent("onRewardedAdHidden called for ad unit ID: " + adEventInfo.getAdUnitId())
+            traceTestAppEvent("onRewardedAdHidden called for ad unit ID: " + adUnitId)
+            traceTestAppEvent("Ad Info: " + adInfo)
         }
 
         private static function traceTestAppEvent(message:String):void
